@@ -20,6 +20,7 @@ public class Queen extends Piece {
      */
     public Queen(Handler handler, String color, int column, int row){
         super(handler, color, "Queen", column, row);
+        value = 1000;
     }
 
     @Override
@@ -32,98 +33,122 @@ public class Queen extends Piece {
     }
 
     @Override
-    public ArrayList<Point> getMovement() {
-        ArrayList<Point> possibleMovements = new ArrayList<>();
+    public ArrayList<Move> getMovement() {
+        ArrayList<Move> possibleMovements = new ArrayList<>();
 
         //right loop
         for(int i = 0; i < BasicBoard.COLUMNS-column; i++){
-            if(handler.getBoard().isPieceAt(column+i,row) && handler.pieceAt(column+i,row) != this){
-                if(!handler.pieceAt(column+i,row).getColor().equals(color))
-                    possibleMovements.add(new Point(column+i,row));
+            Point p = new Point(column+i,row);
+            if(!isMoveOnBoard(p))
+                continue;
+            if(handler.getBoard().isPieceAt(p) && handler.pieceAt(p) != this){
+                if(!handler.pieceAt(p).getColor().equals(color))
+                    possibleMovements.add(new Move(handler,id,p));
                 break;
             }
-            if(handler.pieceAt(column+i,row) != this)
-                possibleMovements.add(new Point(column+i,row));
+            if(handler.pieceAt(p) != this)
+                possibleMovements.add(new Move(handler,id,p));
 
         }
         //left loop
         for(int i = 0; i < column+1; i++){
-            if(handler.getBoard().isPieceAt(column-i,row) && handler.pieceAt(column-i,row) != this){
-                if(!handler.pieceAt(column-i,row).getColor().equals(color))
-                    possibleMovements.add(new Point(column-i,row));
+            Point p = new Point(column-i,row);
+            if(!isMoveOnBoard(p))
+                continue;
+            if(handler.getBoard().isPieceAt(p) && handler.pieceAt(p) != this){
+                if(!handler.pieceAt(p).getColor().equals(color))
+                    possibleMovements.add(new Move(handler,id,p));
                 break;
             }
-            if(handler.pieceAt(column-i,row) != this)
-                possibleMovements.add(new Point(column-i,row));
+            if(handler.pieceAt(p) != this)
+                possibleMovements.add(new Move(handler,id,p));
 
         }
         //up loop
         for(int i = 0; i < row+1; i ++){
-            if(handler.getBoard().isPieceAt(column,row-i) && handler.pieceAt(column,row-i) != this){
-                if(!handler.pieceAt(column,row-i).getColor().equals(color))
-                    possibleMovements.add(new Point(column,row-i));
+            Point p = new Point(column,row-i);
+            if(!isMoveOnBoard(p))
+                continue;
+            if(handler.getBoard().isPieceAt(p) && handler.pieceAt(p) != this){
+                if(!handler.pieceAt(p).getColor().equals(color))
+                    possibleMovements.add(new Move(handler,id,p));
                 break;
             }
-            if(handler.pieceAt(column,row-i) != this)
-                possibleMovements.add(new Point(column,row-i));
+            if(handler.pieceAt(p) != this)
+                possibleMovements.add(new Move(handler,id,p));
 
         }
         //down loop
         for(int i = 0; i < BasicBoard.ROWS-row; i++){
-            if(handler.getBoard().isPieceAt(column,row+i) && handler.pieceAt(column,row+i) != this){
-                if(!handler.pieceAt(column,row+i).getColor().equals(color))
-                    possibleMovements.add(new Point(column,row+i));
+            Point p = new Point(column,row+i);
+            if(!isMoveOnBoard(p))
+                continue;
+            if(handler.getBoard().isPieceAt(p) && handler.pieceAt(p) != this){
+                if(!handler.pieceAt(p).getColor().equals(color))
+                    possibleMovements.add(new Move(handler,id,p));
                 break;
             }
 
-            if(handler.pieceAt(column,row+i) != this)
-                possibleMovements.add(new Point(column,row+i));
+            if(handler.pieceAt(p) != this)
+                possibleMovements.add(new Move(handler,id,p));
 
         }
 
         //Down Right
         for(int i = 1; i <= 7; i++) {
-            if(handler.getBoard().isPieceAt(column + i, row + i)){
-                if(!handler.pieceAt(column + i, row + i).getColor().equals(color))
-                    possibleMovements.add(new Point(column + i, row + i));
+            Point p = new Point(column+i,row+i);
+            if(!isMoveOnBoard(p))
+                continue;
+            if(handler.getBoard().isPieceAt(p)){
+                if(!handler.pieceAt(p).getColor().equals(color))
+                    possibleMovements.add(new Move(handler,id,p));
                 break;
             }
-            possibleMovements.add(new Point(column + i, row + i));
+            possibleMovements.add(new Move(handler,id,p));
         }
 
         //Down Left
         for(int i = 1; i <= 7; i++) {
-            if(handler.getBoard().isPieceAt(column - i, row + i)){
-                if(!handler.pieceAt(column - i, row + i).getColor().equals(color))
-                    possibleMovements.add(new Point(column - i, row + i));
+            Point p = new Point(column-i,row+i);
+            if(!isMoveOnBoard(p))
+                continue;
+            if(handler.getBoard().isPieceAt(p)){
+                if(!handler.pieceAt(p).getColor().equals(color))
+                    possibleMovements.add(new Move(handler,id,p));
                 break;
             }
 
-            possibleMovements.add(new Point(column - i, row + i));
+            possibleMovements.add(new Move(handler,id,p));
 
         }
 
         //Up Right
         for(int i = 1; i <= 7; i++) {
-            if(handler.getBoard().isPieceAt(column + i, row - i)){
-                if(!handler.pieceAt(column + i, row - i).getColor().equals(color))
-                    possibleMovements.add(new Point(column + i, row - i));
+            Point p = new Point(column+i,row-i);
+            if(!isMoveOnBoard(p))
+                continue;
+            if(handler.getBoard().isPieceAt(p)){
+                if(!handler.pieceAt(p).getColor().equals(color))
+                    possibleMovements.add(new Move(handler,id,p));
                 break;
             }
 
-            possibleMovements.add(new Point(column + i, row - i));
+            possibleMovements.add(new Move(handler,id,p));
 
         }
 
         //Up Left
         for(int i = 1; i <= 7; i++) {
-            if(handler.getBoard().isPieceAt(column-i,row-i)){
-                if(!handler.pieceAt(column - i, row - i).getColor().equals(color))
-                    possibleMovements.add(new Point(column - i, row - i));
+            Point p = new Point(column-i,row-i);
+            if(!isMoveOnBoard(p))
+                continue;
+            if(handler.getBoard().isPieceAt(p)){
+                if(!handler.pieceAt(p).getColor().equals(color))
+                    possibleMovements.add(new Move(handler,id,p));
                 break;
             }
 
-            possibleMovements.add(new Point(column - i, row - i));
+            possibleMovements.add(new Move(handler,id,p));
 
         }
 

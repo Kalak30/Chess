@@ -18,7 +18,9 @@ public class Bishop extends Piece{
      * @param row row that the piece will start on
      */
     public Bishop(Handler handler, String color, int column, int row){
+
         super(handler, color, "Bishop", column, row);
+        value = 350;
     }
 
     @Override
@@ -31,52 +33,64 @@ public class Bishop extends Piece{
     }
 
     @Override
-    public ArrayList<Point> getMovement() {
-        ArrayList<Point> possibleMovements = new ArrayList<>();
+    public ArrayList<Move> getMovement() {
+        ArrayList<Move> possibleMovements = new ArrayList<>();
 
         //Down Right
         for(int i = 1; i <= 7; i++) {
-            if(handler.isPieceAt(column + i, row + i)){
-                if(!handler.pieceAt(column + i, row + i).getColor().equals(color))
-                    possibleMovements.add(new Point(column + i, row + i));
+            Point p = new Point(column+i,row+i);
+            if(!isMoveOnBoard(p))
+                continue;
+            if(handler.getBoard().isPieceAt(p)){
+                if(!handler.pieceAt(p).getColor().equals(color))
+                    possibleMovements.add(new Move(handler,id,p));
                 break;
             }
-                possibleMovements.add(new Point(column + i, row + i));
+            possibleMovements.add(new Move(handler,id,p));
         }
 
         //Down Left
         for(int i = 1; i <= 7; i++) {
-            if(handler.isPieceAt(column - i, row + i)){
-                if(!handler.pieceAt(column - i, row + i).getColor().equals(color))
-                    possibleMovements.add(new Point(column - i, row + i));
+            Point p = new Point(column-i,row+i);
+            if(!isMoveOnBoard(p))
+                continue;
+            if(handler.getBoard().isPieceAt(p)){
+                if(!handler.pieceAt(p).getColor().equals(color))
+                    possibleMovements.add(new Move(handler,id,p));
                 break;
             }
 
-            possibleMovements.add(new Point(column - i, row + i));
+            possibleMovements.add(new Move(handler,id,p));
 
         }
 
         //Up Right
         for(int i = 1; i <= 7; i++) {
-            if(handler.isPieceAt(column + i, row - i)){
-                if(!handler.pieceAt(column + i, row - i).getColor().equals(color))
-                    possibleMovements.add(new Point(column + i, row - i));
+            Point p = new Point(column+i,row-i);
+            if(!isMoveOnBoard(p))
+                continue;
+            if(handler.getBoard().isPieceAt(p)){
+                if(!handler.pieceAt(p).getColor().equals(color))
+                    possibleMovements.add(new Move(handler,id,p));
                 break;
             }
 
-            possibleMovements.add(new Point(column + i, row - i));
+            possibleMovements.add(new Move(handler,id,p));
 
         }
 
         //Up Left
         for(int i = 1; i <= 7; i++) {
-            if(handler.isPieceAt(column-i,row-i)){
-                if(!handler.pieceAt(column - i, row - i).getColor().equals(color))
-                    possibleMovements.add(new Point(column - i, row - i));
+            Point p = new Point(column-i,row-i);
+            if(!isMoveOnBoard(p))
+                continue;
+            if(handler.getBoard().isPieceAt(p)){
+                if(!handler.pieceAt(p).getColor().equals(color))
+                    possibleMovements.add(new Move(handler,id,p));
                 break;
             }
 
-            possibleMovements.add(new Point(column - i, row - i));
+            possibleMovements.add(new Move(handler,id,p));
 
         }
 

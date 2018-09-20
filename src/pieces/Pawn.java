@@ -20,7 +20,7 @@ public class Pawn extends Piece {
      */
     public Pawn(Handler handler, String color, int column, int row){
         super(handler, color, "Pawn", column,row);
-
+        value = 100;
     }
 
     @Override
@@ -34,55 +34,63 @@ public class Pawn extends Piece {
 
 
     @Override
-    public ArrayList<Point> getMovement() {
+    public ArrayList<Move> getMovement() {
         if(color.equals("black")){
             return getBlackMovement();
         }
         else
             return getWhiteMovement();
     }
-    public ArrayList<Point> getBlackMovement(){
-        ArrayList<Point> possibleMovements = new ArrayList<>();
+    public ArrayList<Move> getBlackMovement(){
+        ArrayList<Move> possibleMovements = new ArrayList<>();
 
         //if there is not a piece directly below this piece, then add a possible movement in front
-        if(!handler.isPieceAt(column,row+1)) {
-            possibleMovements.add(new Point(column, row + 1));
+        Point front = new Point(column, row +1);
+        Point frontNoMove = new Point(column, row+2);
+        if(isMoveOnBoard(front) && !handler.isPieceAt(front)) {
+            possibleMovements.add(new Move(handler,id,front));
             //if this piece hasn't moved yet and there isn't a piece two rows in below, add a possible movement two rows below
-            if (!hasMoved && !handler.isPieceAt(column, row+2))
-                possibleMovements.add(new Point(column, row + 2));
+            if (isMoveOnBoard(frontNoMove) && !hasMoved && !handler.isPieceAt(frontNoMove))
+                possibleMovements.add(new Move(handler,id,frontNoMove));
         }
 
         //if there is a piece front right of this piece and it is not the players, add a possible movement there
-        if(handler.isPieceAt(column+1,row + 1) && !handler.pieceAt(column+1, row + 1).getColor().equals(color))
-            possibleMovements.add(new Point(column+1, row + 1));
+        Point frontRight = new Point(column + 1, row + 1);
+        if(isMoveOnBoard(frontRight) && handler.isPieceAt(frontRight) && !handler.pieceAt(frontRight).getColor().equals(color))
+            possibleMovements.add(new Move(handler,id,frontRight));
 
         //if there is a piece front left of this piece and it is not the players, add a possible movement there.
-        if(handler.isPieceAt(column - 1, row + 1) && !handler.pieceAt(column-1, row + 1).getColor().equals(color))
-            possibleMovements.add(new Point(column-1, row + 1));
+        Point frontLeft = new Point(column - 1, row + 1);
+        if(isMoveOnBoard(frontLeft) && handler.isPieceAt(frontLeft) && !handler.pieceAt(frontLeft).getColor().equals(color))
+            possibleMovements.add(new Move(handler,id,frontLeft));
 
 
         return  possibleMovements;
     }
-    public ArrayList<Point> getWhiteMovement(){
-        ArrayList<Point> possibleMovements = new ArrayList<>();
+    public ArrayList<Move> getWhiteMovement(){
+        ArrayList<Move> possibleMovements = new ArrayList<>();
 
         //if there is not a piece directly above this piece, then add a possible movement in front
-        if(!handler.isPieceAt(column,row-1)) {
-            possibleMovements.add(new Point(column, row - 1));
+        Point front = new Point(column, row -1);
+        Point frontNoMove = new Point(column, row-2);
+        if(!handler.isPieceAt(front)) {
+            possibleMovements.add(new Move(handler,id,front));
             //if this piece hasn't moved yet and there isn't a piece two rows in front, add a possible movement two rows in front
-            if (!hasMoved && !handler.isPieceAt(column, row-2)) {
-                possibleMovements.add(new Point(column, row - 2));
+            if (!hasMoved && !handler.isPieceAt(frontNoMove)) {
+                possibleMovements.add(new Move(handler,id,frontNoMove));
             }
         }
 
         //if there is a piece front right of this piece and it is not the players, add a possible movement there
-        if(handler.isPieceAt(column+1,row - 1) && !handler.pieceAt(column+1, row - 1).getColor().equals(color)) {
-            possibleMovements.add(new Point(column+1, row - 1));
+        Point frontRight = new Point(column + 1, row - 1);
+        if(handler.isPieceAt(frontRight) && !handler.pieceAt(frontRight).getColor().equals(color)) {
+            possibleMovements.add(new Move(handler,id,frontRight));
         }
 
         //if there is a piece front left of this piece and it is not the players, add a possible movement there.
-        if(handler.isPieceAt(column - 1, row - 1)&& !handler.pieceAt(column-1, row - 1).getColor().equals(color)) {
-            possibleMovements.add(new Point(column-1, row - 1));
+        Point frontLeft = new Point(column - 1, row - 1);
+        if(handler.isPieceAt(frontLeft)&& !handler.pieceAt(frontLeft).getColor().equals(color)) {
+            possibleMovements.add(new Move(handler,id,frontLeft));
         }
 
         return possibleMovements;

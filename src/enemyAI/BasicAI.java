@@ -1,6 +1,7 @@
 package enemyAI;
 
 import game.Handler;
+import pieces.Move;
 import pieces.Piece;
 
 import java.awt.*;
@@ -11,13 +12,13 @@ import java.util.Map;
 public class BasicAI {
 
     private String color;
-    private Piece pieceToMove;
     private ArrayList<Integer> ownedPieces;
-    private Map<Integer, ArrayList<Point>> possibleMoves;
+    private ArrayList<Move> possibleMoves;
 
     private int pieceMoved;
 
     private Handler handler;
+
 
     public BasicAI(Handler handler, String color){
         this.handler = handler;
@@ -25,18 +26,19 @@ public class BasicAI {
         init();
     }
     public void init(){
-        possibleMoves = new HashMap<>();
+        possibleMoves = new ArrayList<>();
     }
 
     public void tick() {
         if (ownedPieces == null){
             ownedPieces = new ArrayList<>();
-            for (int i = 0; i < handler.getBoard().getPieces().size(); i++) {
-                if (handler.getBoard().getPieces().get(i).color.equals(color))
-                    ownedPieces.add(handler.getPiece(i).getId());
+            for (Map.Entry<Integer,Piece> entry: handler.getBoard().getPieces().entrySet()) {
+                if (entry.getValue().getColor().equals(color))
+                    ownedPieces.add(entry.getValue().getId());
             }
     }
         updateOwnedPieced();
+
 
         if(handler.getBoard().isPlayersTurn())
             return;
@@ -50,41 +52,66 @@ public class BasicAI {
 
     public void updateOwnedPieced(){
         ownedPieces.clear();
-        for (int i = 0; i < handler.getBoard().getPieces().size(); i++) {
-            if (handler.getBoard().getPieces().get(i).color.equals(color))
-                ownedPieces.add(handler.getPiece(i).getId());
+        for (Map.Entry<Integer,Piece> entry: handler.getBoard().getPieces().entrySet()) {
+            if (entry.getValue().getColor().equals(color))
+                ownedPieces.add(entry.getValue().getId());
         }
     }
 
     public void getPossibleMoves(){
         for(int i = 0; i < ownedPieces.size(); i++) {
-            possibleMoves.put(ownedPieces.get(i), handler.getPiece(ownedPieces.get(i)).getMovement());
+            possibleMoves.addAll(handler.getPiece(ownedPieces.get(i)).getMovement());
         }
     }
     public void generateBestMove() {
-        Point rdmMovement;
+        Move bestMoveSoFar = null;
+        int bestMoveValue = Integer.MIN_VALUE;
 
-        rdmMovement = getRandomMovement();
+        for(Move m: possibleMoves){
 
-        System.out.println(rdmMovement);
-        handler.setSelectedPiece(pieceMoved);
-        handler.moveSelectedPiece(rdmMovement.x,rdmMovement.y);
-    }
+           m.makeMove();
 
-    public Point getRandomMovement() {
-        Piece rdmPiece = handler.getPiece(ownedPieces.get(handler.randomInt(0, ownedPieces.size()-1)));
-        pieceMoved = rdmPiece.getId();
-        while (handler.getPiece(pieceMoved).getMovement().size()-1 <= 0){
-            rdmPiece = handler.getPiece(ownedPieces.get(handler.randomInt(0, ownedPieces.size()-1)));
-            pieceMoved = rdmPiece.getId();
+            int boardValue = updateBoardValue();
+            if(boardValue > bestMoveValue){
+                bestMoveSoFar = m;
+                bestMoveValue = boardValue;
+            }
+
+            m.undoMove();
         }
 
-        System.out.println(handler.getPiece(pieceMoved).getMovement().size()-1 );
+        bestMoveSoFar.makeMove();
+//        Point rdmMovement;
+//
+//        rdmMovement = getRandomMovement();
+//
+//        System.out.println(rdmMovement);
+//        handler.setSelectedPiece(pieceMoved);
+//        handler.moveSelectedPiece(rdmMovement.x,rdmMovement.y);
+    }
 
-        Point rdmMovement = possibleMoves.get(pieceMoved).get(handler.randomInt(0, handler.getPiece(pieceMoved).getMovement().size() - 1));
-        return rdmMovement;
+//    public Point getRandomMovement() {
+//        Piece rdmPiece = handler.getPiece(ownedPieces.get(handler.randomInt(0, ownedPieces.size()-1)));
+//        pieceMoved = rdmPiece.getId();
+//        while (handler.getPiece(pieceMoved).getMovement().size()-1 <= 0){
+//            rdmPiece = handler.getPiece(ownedPieces.get(handler.randomInt(0, ownedPieces.size()-1)));
+//            pieceMoved = rdmPiece.getId();
+//        }
+//
+//        System.out.println(handler.getPiece(pieceMoved).getMovement().size()-1 );
+//
+//        Point rdmMovement = possibleMoves.get(pieceMoved).get(handler.randomInt(0, handler.getPiece(pieceMoved).getMovement().size() - 1));
+//        return rdmMovement;
+//
+//
+//    }
 
-
+    public int updateBoardValue(){
+        int boardValue = 0;
+        for(Map.Entry<Integer,Piece> entry: handler.getBoard().getPieces().entrySet()){
+            boardValue += entry.getValue().getValue() * (entry.getValue().getColor().equals(color) ? 1 : -1);
+        }
+        return boardValue;
     }
 
 

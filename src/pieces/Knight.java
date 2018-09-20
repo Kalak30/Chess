@@ -19,6 +19,7 @@ public class Knight extends Piece {
      */
     public Knight(Handler handler, String color, int column, int row){
         super(handler, color, "Knight", column, row);
+        value = 350;
     }
 
     @Override
@@ -31,39 +32,46 @@ public class Knight extends Piece {
     }
 
     @Override
-    public ArrayList<Point> getMovement() {
-        ArrayList<Point> possibleMovements = new ArrayList<>();
+    public ArrayList<Move> getMovement() {
+        ArrayList<Move> possibleMovements = new ArrayList<>();
         //Upper Left
-        if(!handler.isPieceAt(column-1,row-2) ||handler.isPieceAt(column-1, row-2) && !handler.pieceAt(column-1,row-2).getColor().equals(color))
-            possibleMovements.add(new Point(column-1,row-2));
+        Point upLeft = new Point(column - 1, row - 2);
+        if(isMoveOnBoard(upLeft) && !handler.isPieceAt(upLeft) ||handler.isPieceAt(upLeft) && !handler.pieceAt(upLeft).getColor().equals(color))
+            possibleMovements.add(new Move(handler,id,upLeft));
 
         //Upper Right
-        if(!handler.isPieceAt(column+1,row-2) ||handler.isPieceAt(column+1,row-2) && !handler.pieceAt(column+1,row-2).getColor().equals(color))
-            possibleMovements.add(new Point(column+1,row-2));
-
+        Point upRight = new Point(column + 1, row - 2);
+        if(isMoveOnBoard(upRight) && !handler.isPieceAt(upRight) ||handler.isPieceAt(upRight) && !handler.pieceAt(upRight).getColor().equals(color))
+            possibleMovements.add(new Move(handler,id,upRight));
         //Right Up
-        if(!handler.isPieceAt(column+2,row-1) ||handler.isPieceAt(column+2,row-1) && !handler.pieceAt(column+2,row-1).getColor().equals(color))
-            possibleMovements.add(new Point(column+2,row-1));
+        Point rightUp = new Point(column + 2, row - 1);
+        if(isMoveOnBoard(rightUp) && !handler.isPieceAt(rightUp) ||handler.isPieceAt(rightUp) && !handler.pieceAt(rightUp).getColor().equals(color))
+            possibleMovements.add(new Move(handler,id,rightUp));
 
         //Right Down
-        if(!handler.isPieceAt(column+2,row+1) ||handler.isPieceAt(column+2,row+1) && !handler.pieceAt(column+2,row+1).getColor().equals(color))
-            possibleMovements.add(new Point(column+2,row+1));
+        Point rightDown = new Point(column + 2, row + 1);
+        if(isMoveOnBoard(rightDown) && !handler.isPieceAt(rightDown) ||handler.isPieceAt(rightDown) && !handler.pieceAt(rightDown).getColor().equals(color))
+            possibleMovements.add(new Move(handler,id,rightDown));
 
         //Lower Right
-        if(!handler.isPieceAt(column+1,row+2) ||handler.isPieceAt(column+1, row+2) && !handler.pieceAt(column+1,row+2).getColor().equals(color))
-            possibleMovements.add(new Point(column+1,row+2));
+        Point downRight = new Point(column + 1, row + 2);
+        if(isMoveOnBoard(downRight) && !handler.isPieceAt(downRight) ||handler.isPieceAt(downRight) && !handler.pieceAt(downRight).getColor().equals(color))
+            possibleMovements.add(new Move(handler,id,downRight));
 
         //Lower Left
-        if(!handler.isPieceAt(column-1,row+2) ||handler.isPieceAt(column-1, row+2) && !handler.pieceAt(column-1,row+2).getColor().equals(color))
-            possibleMovements.add(new Point(column-1,row+2));
+        Point downLeft = new Point(column - 1, row + 2);
+        if(isMoveOnBoard(downLeft) && !handler.isPieceAt(downLeft) ||handler.isPieceAt(downLeft) && !handler.pieceAt(downLeft).getColor().equals(color))
+            possibleMovements.add(new Move(handler,id,downLeft));
 
         //Left down
-        if(!handler.isPieceAt(column-2,row+1) ||handler.isPieceAt(column-2, row-1) && !handler.pieceAt(column-2,row-1).getColor().equals(color))
-            possibleMovements.add(new Point(column-2,row+1));
+        Point leftDown = new Point(column - 2, row + 1);
+        if(isMoveOnBoard(leftDown) && !handler.isPieceAt(leftDown) ||handler.isPieceAt(leftDown) && !handler.pieceAt(leftDown).getColor().equals(color))
+            possibleMovements.add(new Move(handler,id,leftDown));
 
         //Left Up
-        if(!handler.isPieceAt(column-2,row-1) ||handler.isPieceAt(column-2, row-1) && !handler.pieceAt(column-2,row-1).getColor().equals(color))
-            possibleMovements.add(new Point(column-2,row-1));
+        Point leftUp = new Point(column - 2, row - 1);
+        if(isMoveOnBoard(leftUp) && !handler.isPieceAt(leftUp) ||handler.isPieceAt(leftUp) && !handler.pieceAt(leftUp).getColor().equals(color))
+            possibleMovements.add(new Move(handler,id,leftUp));
 
 
 

@@ -4,7 +4,7 @@ import boards.Board;
 import input.MouseManager;
 import pieces.Piece;
 
-import java.util.Random;
+import java.awt.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -45,13 +45,10 @@ public class Handler {
      */
     public Piece getPiece(int piece){return game.getBoard().getPieces().get(piece);}
 
-    public Piece pieceAt(int column, int row){return game.getBoard().pieceAt(column,row);}
+    public Piece pieceAt(Point p){return game.getBoard().pieceAt(p);}
 
-    public boolean isPieceAt(int column, int row){return game.getBoard().isPieceAt(column,row);}
+    public boolean isPieceAt(Point p){return game.getBoard().isPieceAt(p);}
 
-    public void setSelectedPiece(int id){game.getBoard().setSelectePiece(id);}
-
-    public void moveSelectedPiece(int column, int row){game.getBoard().moveSelectedPiece(column,row);}
     /**
      * Gets the game object
      * @return Game object

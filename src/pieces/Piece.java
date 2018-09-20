@@ -55,6 +55,8 @@ public abstract class Piece{
      */
     public String type;
 
+    protected int value;
+
     /**
      * Basic constructor for a piece. Initializes the above variables.
      * @param handler Handler for information about the board and the game class
@@ -73,6 +75,18 @@ public abstract class Piece{
         id = totalPieces;
         totalPieces++;
 
+    }
+
+    public void moveTo(Point p){
+        column = p.x;
+        row = p.y;
+    }
+    public Point getPos(){
+        return new Point(column,row);
+    }
+
+    public boolean isMoveOnBoard(Point p){
+        return p.x >= 0 && p.x < 8 && p.y >= 0 && p.y < 8;
     }
 
     /**
@@ -142,7 +156,7 @@ public abstract class Piece{
      * Abstract method to return a list of possible points the piece could move to.
      * @return possibleMovements
      */
-    public abstract ArrayList<Point> getMovement();
+    public abstract ArrayList<Move> getMovement();
 
     public String getColor() {
         return color;
@@ -154,5 +168,9 @@ public abstract class Piece{
 
     public String toString(){
         return "Column:   " + column + "  Row:    "+ row;
+    }
+
+    public int getValue() {
+        return value;
     }
 }

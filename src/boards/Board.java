@@ -6,6 +6,7 @@ import java.util.Map;
 
 import enemyAI.BasicAI;
 import game.*;
+import pieces.Move;
 import pieces.Piece;
 
 /**
@@ -42,7 +43,7 @@ public abstract class Board {
     /**
      * A list of points that describe the possible moves the selected piece has
      */
-    protected ArrayList<Point> selectedPieceMove;
+    protected ArrayList<Move> selectedPieceMove;
 
     /**
      * String to store the color of the player
@@ -122,33 +123,28 @@ public abstract class Board {
      * Updates whether or not a piece is selected and which piece is selected
      */
     public void updateSelectedPiece(){
-
-        if(isPieceAt(selectedBoardPos.x,selectedBoardPos.y) && pieceAt(selectedBoardPos.x,selectedBoardPos.y).isPlayers()) {
-            selectedPiece = pieceAt(selectedBoardPos.x, selectedBoardPos.y);
+        if(isPieceAt(selectedBoardPos) && pieceAt(selectedBoardPos).isPlayers()) {
+            System.out.println("click");
+            selectedPiece = pieceAt(selectedBoardPos);
             System.out.println(selectedPiece.type);
         }
     }
 
-    public void setSelectePiece(int id){
+    public void setSelectedPiece(int id){
         selectedPiece = pieces.get(id);
     }
 
     /**
      * Moves the selected piece to a certain column and row. Then resets selectedPieceMove list
-     * @param column Column that the selected piece should be moved to
-     * @param row Row that the selected piece should be moved to
+     * @param m The move that the selectedPiece should make
      */
-    public void moveSelectedPiece(int column, int row){
-        if(isPieceAt(column,row) && pieceAt(column,row)!= selectedPiece){
-            pieces.remove(pieceAt(column,row));
+    public void moveSelectedPiece(Move m){
+        if(isPieceAt(m.getMove()) && pieceAt(m.getMove())!= selectedPiece){
+            pieces.remove(pieceAt(m.getMove()).getId());
         }
 
-        if(column >= 0 && column < 8 && row >= 0 && row < 8) {
-            selectedPiece.setColumn(column);
-            selectedPiece.setRow(row);
-        }
-        else
-            return;
+        selectedPiece.moveTo(m.getMove());
+
         if(!selectedPiece.isHasMoved()){
             selectedPiece.setHasMoved(true);
         }
@@ -162,9 +158,9 @@ public abstract class Board {
      * <p> If a possible move was clicked on, it calls the moveSelectedPiece(int,int) method, then returns to quit the loop</p>
      */
     protected void checkPieceMove(){
-        for(Point p: selectedPieceMove){
-            if(selectedBoardPos.x == p.x && selectedBoardPos.y == p.y){
-                moveSelectedPiece(p.x,p.y);
+        for(Move move: selectedPieceMove){
+            if(selectedBoardPos.equals(move.getMove())){
+                moveSelectedPiece(move);
                 return;
             }
         }
@@ -172,12 +168,11 @@ public abstract class Board {
 
     /**
      * Returns a boolean value determining if there is a piece at the specified column and row
-     * @param column Column to check for piece
-     * @param row Row to check for piece
+     * @param p Point to check for piece
      * @return True if there is a piece at specified spot -- False is there is no piece at specified spot
      */
-    public boolean isPieceAt(int column, int row){
-        if(pieceAt(column, row) != null)
+    public boolean isPieceAt(Point p){
+        if(pieceAt(p) != null)
             return true;
         else
             return false;
@@ -186,14 +181,13 @@ public abstract class Board {
     /**
      * Returns a Piece object of the piece at the specified column and row.
      * <p>isPieceAt(column,row) should return true</p>
-     * @param column Column to get the piece at
-     * @param row Row to get the piece at
+     * @param p Point to get the piece at
      * @return Returns the piece at the column and row specified
      *         Returns null if there is no piece there
      */
-    public Piece pieceAt(int column, int row){
+    public Piece pieceAt(Point p){
         for(Map.Entry<Integer,Piece> entry: pieces.entrySet()){
-            if(entry.getValue().getPieceColumn() == column && entry.getValue().getPieceRow() == row)
+            if(entry.getValue().getPos().equals(p))
                 return  entry.getValue();
 
         }
@@ -205,7 +199,7 @@ public abstract class Board {
      * @return True if there is a piece at the selected board position and it is the players -- False otherwise
      */
     public boolean isPieceSelected(){
-        if(isPieceAt(selectedBoardPos.x,selectedBoardPos.y) && pieceAt(selectedBoardPos.x,selectedBoardPos.y).isPlayers())
+        if(isPieceAt(selectedBoardPos) && pieceAt(selectedBoardPos).isPlayers())
             return true;
 
         return false;
@@ -217,7 +211,7 @@ public abstract class Board {
      */
     public void getSelectedPieceMove(){
         if(isPieceSelected())
-            selectedPieceMove = pieceAt(selectedBoardPos.x,selectedBoardPos.y).getMovement();
+            selectedPieceMove = pieceAt(selectedBoardPos).getMovement();
     }
 
     /*

@@ -53,6 +53,7 @@ public class BasicBoard extends Board {
         if(isPlayersTurn) {
             if (handler.getMouseManager().isLeftClicked()) {
                 updateSelectedBoardPos();
+
                 if (!selectedBoardPos.equals(new Point(8, 8))) {
                     updateSelectedPiece();
                     getSelectedPieceMove();
@@ -69,10 +70,12 @@ public class BasicBoard extends Board {
         g.drawImage(Assets.board,(handler.getWidth()/2)-BOARD_WIDTH/2,(handler.getHeight()/2)-BOARD_HEIGHT/2, BOARD_WIDTH, BOARD_HEIGHT,null);
 
         if(!selectedBoardPos.equals(new Point(8,8))) {
-            for (Point pos : selectedPieceMove) {
-                if (pos.x >= 0 && pos.x < 8 && pos.y >= 0 && pos.y < 8)
-                    g.drawImage(Assets.selected_Tile, columns[pos.x], rows[pos.y], 64, 64, null);
-
+            for (Move m : selectedPieceMove) {
+                try {
+                    g.drawImage(Assets.selected_Tile, columns[m.getMove().x], rows[m.getMove().y], 64, 64, null);
+                }catch (Exception e){
+                    System.out.println(m.getMove());
+                }
             }
         }
 
@@ -91,7 +94,7 @@ public class BasicBoard extends Board {
         for(int i = 0; i < columns.length; i++) {
             for (int j = 0; j < rows.length; j++) {
                 if (handler.getMouseManager().getMouseX() >= columns[i] && handler.getMouseManager().getMouseX() < columns[i] + Piece.DEFAULT_WIDTH && handler.getMouseManager().getMouseY() >= rows[j] && handler.getMouseManager().getMouseY() < rows[j] + Piece.DEFAULT_HEIGHT){
-                    if (selectedBoardPos.x != i && selectedBoardPos.x != j) {
+                    if (selectedBoardPos.x != i && selectedBoardPos.y != j)
                             selectedBoardPos.move(i, j);
                             return;
                     }
@@ -100,7 +103,7 @@ public class BasicBoard extends Board {
             }
         }
 
-    }
+
 
 
     public void setUpBoardPositions(){
