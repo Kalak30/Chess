@@ -30,7 +30,14 @@ public class Move {
         handler.getPiece(pieceID).moveTo(move);
     }
 
+    public void testMove(){
+        handler.getPiece(pieceID).setPos(move);
+    }
+
     public void undoMove(){
-        handler.getPiece(pieceID).moveTo(startPos);
+        Point temp = move;
+        move = startPos;
+        handler.getPiece(pieceID).setPos(move);
+        move = temp;
     }
 }

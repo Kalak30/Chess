@@ -6,6 +6,7 @@ import pieces.Piece;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -59,6 +60,7 @@ public class BasicAI {
     }
 
     public void getPossibleMoves(){
+        possibleMoves.clear();
         for(int i = 0; i < ownedPieces.size(); i++) {
             possibleMoves.addAll(handler.getPiece(ownedPieces.get(i)).getMovement());
         }
@@ -67,50 +69,31 @@ public class BasicAI {
         Move bestMoveSoFar = null;
         int bestMoveValue = Integer.MIN_VALUE;
 
-        for(Move m: possibleMoves){
+        ArrayList<Move> moves = possibleMoves;
+        Collections.shuffle(moves);
+        for (Move m : possibleMoves) {
 
-           m.makeMove();
+            m.makeMove();
 
             int boardValue = updateBoardValue();
-            if(boardValue > bestMoveValue){
+            if (boardValue > bestMoveValue) {
                 bestMoveSoFar = m;
                 bestMoveValue = boardValue;
+                System.out.println(bestMoveSoFar.getMove());
             }
 
             m.undoMove();
         }
 
         bestMoveSoFar.makeMove();
-//        Point rdmMovement;
-//
-//        rdmMovement = getRandomMovement();
-//
-//        System.out.println(rdmMovement);
-//        handler.setSelectedPiece(pieceMoved);
-//        handler.moveSelectedPiece(rdmMovement.x,rdmMovement.y);
     }
-
-//    public Point getRandomMovement() {
-//        Piece rdmPiece = handler.getPiece(ownedPieces.get(handler.randomInt(0, ownedPieces.size()-1)));
-//        pieceMoved = rdmPiece.getId();
-//        while (handler.getPiece(pieceMoved).getMovement().size()-1 <= 0){
-//            rdmPiece = handler.getPiece(ownedPieces.get(handler.randomInt(0, ownedPieces.size()-1)));
-//            pieceMoved = rdmPiece.getId();
-//        }
-//
-//        System.out.println(handler.getPiece(pieceMoved).getMovement().size()-1 );
-//
-//        Point rdmMovement = possibleMoves.get(pieceMoved).get(handler.randomInt(0, handler.getPiece(pieceMoved).getMovement().size() - 1));
-//        return rdmMovement;
-//
-//
-//    }
 
     public int updateBoardValue(){
         int boardValue = 0;
         for(Map.Entry<Integer,Piece> entry: handler.getBoard().getPieces().entrySet()){
             boardValue += entry.getValue().getValue() * (entry.getValue().getColor().equals(color) ? 1 : -1);
         }
+        System.out.println(boardValue+"\n");
         return boardValue;
     }
 

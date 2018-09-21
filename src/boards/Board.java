@@ -136,14 +136,14 @@ public abstract class Board {
 
     /**
      * Moves the selected piece to a certain column and row. Then resets selectedPieceMove list
-     * @param m The move that the selectedPiece should make
+     * @param p The move that the selectedPiece should make
      */
-    public void moveSelectedPiece(Move m){
-        if(isPieceAt(m.getMove()) && pieceAt(m.getMove())!= selectedPiece){
-            pieces.remove(pieceAt(m.getMove()).getId());
+    public void moveSelectedPiece(Point p){
+        if(isPieceAt(p) && pieceAt(p)!= selectedPiece){
+            pieces.remove(pieceAt(p).getId());
         }
 
-        selectedPiece.moveTo(m.getMove());
+        selectedPiece.setPos(p);
 
         if(!selectedPiece.isHasMoved()){
             selectedPiece.setHasMoved(true);
@@ -160,7 +160,7 @@ public abstract class Board {
     protected void checkPieceMove(){
         for(Move move: selectedPieceMove){
             if(selectedBoardPos.equals(move.getMove())){
-                moveSelectedPiece(move);
+                moveSelectedPiece(move.getMove());
                 return;
             }
         }

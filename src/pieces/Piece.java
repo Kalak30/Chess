@@ -78,15 +78,27 @@ public abstract class Piece{
     }
 
     public void moveTo(Point p){
+        handler.getBoard().setSelectedPiece(id);
+        handler.getBoard().moveSelectedPiece(p);
+    }
+
+    public void setPos(Point p){
         column = p.x;
         row = p.y;
     }
+
     public Point getPos(){
         return new Point(column,row);
     }
 
     public boolean isMoveOnBoard(Point p){
-        return p.x >= 0 && p.x < 8 && p.y >= 0 && p.y < 8;
+
+        if(p.x >= 0 && p.x < 8 && p.y >= 0 && p.y < 8) {
+            return true;
+        }
+        else
+            return false;
+
     }
 
     /**

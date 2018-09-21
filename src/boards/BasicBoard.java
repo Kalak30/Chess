@@ -71,11 +71,7 @@ public class BasicBoard extends Board {
 
         if(!selectedBoardPos.equals(new Point(8,8))) {
             for (Move m : selectedPieceMove) {
-                try {
                     g.drawImage(Assets.selected_Tile, columns[m.getMove().x], rows[m.getMove().y], 64, 64, null);
-                }catch (Exception e){
-                    System.out.println(m.getMove());
-                }
             }
         }
 
