@@ -37,7 +37,7 @@ public class Move {
     public void undoMove(){
         Point temp = move;
         move = startPos;
-        handler.getPiece(pieceID).setPos(move);
+        handler.getPiece(pieceID).moveTo(move);
         move = temp;
     }
 }

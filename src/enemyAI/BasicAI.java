@@ -73,7 +73,14 @@ public class BasicAI {
         Collections.shuffle(moves);
         for (Move m : possibleMoves) {
 
+            Piece removedPiece = null;
+
+            if(handler.isPieceAt(m.getMove())) {
+                removedPiece = handler.pieceAt(m.getMove());
+                removedPiece.setId(handler.pieceAt(m.getMove()).getId());
+            }
             m.makeMove();
+
 
             int boardValue = updateBoardValue();
             if (boardValue > bestMoveValue) {
@@ -81,6 +88,9 @@ public class BasicAI {
                 bestMoveValue = boardValue;
                 System.out.println(bestMoveSoFar.getMove());
             }
+
+            if(removedPiece != null)
+                handler.getBoard().getPieces().put(removedPiece.getId(), removedPiece);
 
             m.undoMove();
         }

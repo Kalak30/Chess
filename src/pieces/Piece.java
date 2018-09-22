@@ -185,4 +185,8 @@ public abstract class Piece{
     public int getValue() {
         return value;
     }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 }

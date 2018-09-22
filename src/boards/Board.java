@@ -71,6 +71,7 @@ public abstract class Board {
     protected BasicAI computer;
 
 
+
     /**
      * Initializes selectedPiece to null and selectedPieceMove to a blank ArrayList
      * <p>Initializes the handler to the input handler parameter. Also calls the init() method</p>
@@ -277,4 +278,5 @@ public abstract class Board {
     public void setPlayersTurn(boolean playersTurn) {
         isPlayersTurn = playersTurn;
     }
+
 }
